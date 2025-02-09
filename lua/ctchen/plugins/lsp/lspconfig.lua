@@ -131,6 +131,12 @@ return {
           },
         })
       end,
+      ["eslint"] = function()
+        lspconfig["eslintt"].setup({
+          capabilities = capabilities,
+          filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+        })
+      end,
     })
   end,
 }
