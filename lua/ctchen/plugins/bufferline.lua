@@ -16,16 +16,10 @@ return {
         end,
         offsets = {
           {
-            filetype = "neo-tree",
-            text = "NeoTree",
-            text_align = "center",
+            filetype = "NvimTree",
+            text = "File Explorer",
             separator = true,
-          },
-          {
-            filetype = "trouble",
-            text = "Trouble",
-            text_align = "center",
-            separator = true,
+            text_align = "left",
           },
         },
       },
