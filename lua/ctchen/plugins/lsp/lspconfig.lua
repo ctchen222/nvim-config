@@ -132,7 +132,7 @@ return {
         })
       end,
       ["eslint"] = function()
-        lspconfig["eslintt"].setup({
+        lspconfig["eslint"].setup({
           capabilities = capabilities,
           filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         })

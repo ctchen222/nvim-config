@@ -46,7 +46,7 @@ return {
         "isort", -- python formatter
         "black", -- python formatter
         "pylint", -- python linter
-        "eslint_d", -- js/ts linter
+        "eslint", -- js/ts linter
       },
     })
 
@@ -58,7 +58,7 @@ return {
         "isort", -- python formatter
         "black", -- python formatter
         "pylint", -- python linter
-        "eslint_d", -- js/ts linter
+        "eslint", -- js/ts linter
       },
       -- automatically setup null-ls with the installed sources
       automatic_installation = true,
