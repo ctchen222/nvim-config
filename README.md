@@ -20,5 +20,6 @@ mv ~/.cache/nvim{,.bak}
 
 ```bash
 # bash
-git clone https://github.com/zongben/nvim-config.git ~/.config/nvim
+git clone https://github.com/ctchen1999/nvim-config.git ~/.config/nvim
 ```
+
