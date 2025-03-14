@@ -22,7 +22,7 @@ return {
           glyphs = {
             folder = {
               arrow_closed = "一", -- arrow when folder is closed
-              arrow_open = "|", -- arrow when folder is open
+              arrow_open = "/", -- arrow when folder is open
             },
           },
         },
