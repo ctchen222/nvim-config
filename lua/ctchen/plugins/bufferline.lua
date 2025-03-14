@@ -26,6 +26,8 @@ return {
         vim.api.nvim_set_keymap("n", "<Tab>", ":BufferLineCycleNext<CR>", { noremap = true, silent = true }),
         vim.api.nvim_set_keymap("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { noremap = true, silent = true }),
         vim.api.nvim_set_keymap("n", "<S-R>", ":bdelete<CR>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("n", "<C-y>", ":BufferLineMovePrev<CR>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("n", "<C-o>", ":BufferLineMoveNext<CR>", { noremap = true, silent = true }),
       },
     },
   },
