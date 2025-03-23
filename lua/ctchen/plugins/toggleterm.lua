@@ -31,6 +31,13 @@ return {
         end,
         desc = "Open Terminal (Float)",
       },
+      {
+        "<leader>nj",
+        function()
+          require("toggleterm.terminal").Terminal:new({ direction = "horizontal", size = 40 }):toggle()
+        end,
+        desc = "Open Terminal (Horizontal)",
+      },
     },
   },
 }
