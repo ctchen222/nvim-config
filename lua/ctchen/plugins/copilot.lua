@@ -14,12 +14,22 @@ return {
       {
         "<leader>co",
         "<cmd>CopilotChatOpen<cr>",
-        desc = "open copilot chat",
+        desc = "Open Copilot Chat",
+      },
+      {
+        "<leader>cc",
+        "<cmd>CopilotChatClose<cr>",
+        desc = "Close Copilot Chat",
       },
       {
         "<leader>ct",
         "<cmd>CopilotChatToggle<cr>",
-        desc = "toggle copilot chat",
+        desc = "Toggle Copilot Chat",
+      },
+      {
+        "<leader>cp",
+        "<cmd>CopilotChatPrompts<cr>",
+        desc = "Copilot Prompts",
       },
     },
   },
