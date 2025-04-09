@@ -11,7 +11,7 @@ return {
       {
         "<leader>nv",
         function()
-          require("toggleterm.terminal").Terminal:new({ direction = "vertical", size = 40 }):toggle()
+          require("toggleterm.terminal").Terminal:new({ direction = "vertical", size = 60 }):toggle()
         end,
         desc = "Open Terminal (Vertical)",
       },
