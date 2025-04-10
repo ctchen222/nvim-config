@@ -31,6 +31,11 @@ return {
         "<cmd>CopilotChatPrompts<cr>",
         desc = "Copilot Prompts",
       },
+      {
+        "<leader>cm",
+        "<cmd>CopilotChatModels<cr>",
+        desc = "Copilot Models",
+      },
     },
   },
 }
