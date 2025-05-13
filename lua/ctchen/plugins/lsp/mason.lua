@@ -29,7 +29,6 @@ return {
         "html",
         "cssls",
         "tailwindcss",
-        "svelte",
         "lua_ls",
         "graphql",
         "emmet_ls",
@@ -61,7 +60,7 @@ return {
         "eslint", -- js/ts linter
       },
       -- automatically setup null-ls with the installed sources
-      automatic_installation = true,
+      automatic_installation = false,
     })
   end,
 }
