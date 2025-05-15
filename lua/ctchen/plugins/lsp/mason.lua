@@ -1,9 +1,75 @@
 return {
-  "williamboman/mason.nvim",
-  dependencies = {
-    "williamboman/mason-lspconfig.nvim",
+  {
+    "williamboman/mason.nvim",
+    version = "1.10.0",
+    lazy = false,
+    config = function()
+      require("mason").setup({
+        ui = {
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗",
+          },
+        },
+        log_level = vim.log.levels.DEBUG, -- 啟用調試日誌
+      })
+    end,
+  },
+  {
+    "williamboman/mason-lspconfig.nvim", -- 修正倉庫名稱
+    version = "1.31.0",
+    lazy = false,
+    dependencies = { "williamboman/mason.nvim" },
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "html",
+          "cssls",
+          "tailwindcss",
+          "lua_ls",
+          "graphql",
+          "emmet_ls",
+          "pyright",
+          "eslint",
+        },
+        automatic_installation = true,
+      })
+    end,
+  },
+  {
     "jay-babu/mason-null-ls.nvim",
+    lazy = false,
+    dependencies = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
+    config = function()
+      require("mason-null-ls").setup({
+        ensure_installed = {
+          "prettier", -- js/ts formatter
+          "stylua", -- lua formatter
+          "isort", -- python formatter
+          "black", -- python formatter
+          "pylint", -- python linter
+          "eslint", -- js/ts linter
+        },
+        automatic_installation = false,
+      })
+    end,
+  },
+  {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
+    lazy = false,
+    dependencies = { "williamboman/mason.nvim" },
+    config = function()
+      require("mason-tool-installer").setup({
+        ensure_installed = {
+          "stylua", -- lua formatter
+          "isort", -- python formatter
+          "black", -- python formatter
+          "pylint", -- python linter
+          "eslint", -- js/ts linter
+        },
+      })
+    end,
   },
   config = function()
     -- import plugins safely
@@ -32,7 +98,6 @@ return {
         "lua_ls",
         "graphql",
         "emmet_ls",
-        "prismals",
         "pyright",
         "eslint",
       },
