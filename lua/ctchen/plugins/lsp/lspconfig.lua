@@ -211,6 +211,7 @@ return {
       function(server_name)
         lspconfig[server_name].setup({
           capabilities = capabilities,
+          on_attach = lsp_attach,
         })
       end,
       ["svelte"] = function()
@@ -256,6 +257,24 @@ return {
                 callSnippet = "Replace",
               },
             },
+          },
+        })
+      end,
+      ["tailwindcss"] = function()
+        lspconfig["tailwindcss"].setup({
+          capabilities = capabilities,
+          filetypes = {
+            "html",
+            "typescriptreact",
+            "javascriptreact",
+            "css",
+            "sass",
+            "scss",
+            "typescript",
+            "javascript",
+            "heex",
+            "phoenix-heex",
+            "eruby",
           },
         })
       end,
