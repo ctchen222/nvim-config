@@ -278,6 +278,12 @@ return {
           },
         })
       end,
+      ["htmx"] = function()
+        lspconfig["htmx"].setup({
+          capabilities = capabilities,
+          filetypes = { "html", "htmldjango", "templ" },
+        })
+      end,
     })
   end,
 }
