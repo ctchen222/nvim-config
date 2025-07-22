@@ -49,5 +49,6 @@ return {
     keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
     keymap.set("n", "<leader>fd", "<cmd>Telescope lsp_definitions<cr>", { desc = "Find Original Code" })
     keymap.set("n", "<leader>fe", "<cmd>Telescope diagnostics<cr>", { desc = "Find Implementations" })
+    keymap.set("n", "<leader>fi", "<cmd>Telescope lsp_implementations<cr>", { desc = "Find Implementations" })
   end,
 }
