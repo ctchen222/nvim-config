@@ -22,15 +22,13 @@ return {
             text_align = "center",
           },
         },
+
+        vim.api.nvim_set_keymap("n", "<Tab>", ":BufferLineCycleNext<CR>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("n", "<S-R>", ":bdelete<CR>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("n", "<C-y>", ":BufferLineMovePrev<CR>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("n", "<C-o>", ":BufferLineMoveNext<CR>", { noremap = true, silent = true }),
       },
     },
-    config = function(_, opts)
-      require("bufferline").setup(opts)
-      vim.keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>", { noremap = true, silent = true })
-      vim.keymap.set("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { noremap = true, silent = true })
-      vim.keymap.set("n", "<S-R>", ":bdelete<CR>", { noremap = true, silent = true })
-      vim.keymap.set("n", "<C-y>", ":BufferLineMovePrev<CR>", { noremap = true, silent = true })
-      vim.keymap.set("n", "<C-o>", ":BufferLineMoveNext<CR>", { noremap = true, silent = true })
-    end,
   },
 }
