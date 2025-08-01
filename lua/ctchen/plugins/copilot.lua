@@ -8,6 +8,7 @@ return {
     build = "make tiktoken", -- only on macos or linux
     opts = {
       -- see configuration section for options
+      language = "Mandaring",
     },
     -- see commands section for default commands if you want to lazy load on them
     keys = {
