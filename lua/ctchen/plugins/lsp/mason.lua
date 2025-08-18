@@ -183,6 +183,7 @@ return {
         "black", -- python formatter
         "pylint",
         "eslint_d",
+        "sqlfluff", -- sql formatter
       },
     })
   end,
