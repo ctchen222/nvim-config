@@ -16,7 +16,7 @@ return {
         tool = "🔧 Tool ",
       },
       separator = "━━",
-      auto_fold = true, -- Automatically folds non-assistant messages
+      auto_fold = false, -- Automatically folds non-assistant messages
       window = {
         layout = "vertical", -- 'vertical', 'horizontal', 'float'
         width = 0.5, -- 50% of screen width
