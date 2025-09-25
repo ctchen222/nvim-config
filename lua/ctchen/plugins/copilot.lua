@@ -21,6 +21,7 @@ return {
         layout = "vertical", -- 'vertical', 'horizontal', 'float'
         width = 0.5, -- 50% of screen width
       },
+      remember_as_sticky = false,
     },
     -- see commands section for default commands if you want to lazy load on them
     keys = {
