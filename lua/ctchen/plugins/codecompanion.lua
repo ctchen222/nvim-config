@@ -1,60 +1,99 @@
 return {
-  "olimorris/codecompanion.nvim",
-  version = "v17.33.0",
-  cmd = { "CodeCompanion", "CodeCompanionChat" },
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-  },
-  opts = {
-    language = "Tradition Chinese",
-    adapters = {
-      -- anthropic = {
-      --   api_key = os.getenv("ANTHROPIC_API_KEY"),
-      -- },
+  {
+    "olimorris/codecompanion.nvim",
+    version = "v17.33.0",
+    cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionActions" },
+    ft = { "codecompanion" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
     },
-    strategies = {
-      chat = {
-        send = {
-          modes = { "n", "i" },
-          key = "<C-s>",
+    opts = {
+      language = "Traditional Chinese",
+      adapters = {
+        -- anthropic = {
+        --   api_key = os.getenv("ANTHROPIC_API_KEY"),
+        -- },
+      },
+      strategies = {
+        chat = {
+          send = {
+            modes = { "n", "i" },
+            key = "<C-s>",
+          },
+          -- adapter = "anthropic",
+          adapter = "copilot",
+          model = "claude-sonnet-4-20250514",
         },
-        -- adapter = "anthropic",
+      },
+      inline = {
         adapter = "copilot",
-        model = "claude-sonnet-4-20250514",
+        model = "claude-3-haiku-20240307",
+        keymaps = {
+          accept_change = {
+            modes = { n = "ga" },
+            description = "Accept the suggested change",
+          },
+          reject_change = {
+            modes = { n = "gr" },
+            opts = { nowait = true },
+            description = "Reject the suggested change",
+          },
+        },
       },
     },
-    inline = {
-      adapter = "copilot",
-      model = "claude-3-haiku-20240307",
-      keymaps = {
-        accept_change = {
-          modes = { n = "ga" },
-          description = "Accept the suggested change",
-        },
-        reject_change = {
-          modes = { n = "gr" },
-          opts = { nowait = true },
-          description = "Reject the suggested change",
-        },
+    keys = {
+      {
+        "<leader>ca",
+        "<cmd>CodeCompanionActions<cr>",
+        mode = { "n", "v" },
+        desc = "Code Companion: Actions",
+      },
+      {
+        "<leader>cc",
+        "<cmd>CodeCompanionChat<cr>",
+        desc = "Code Companion: Chat",
+      },
+      {
+        "<leader>ct",
+        "<cmd>CodeCompanionChat Toggle<cr>",
+        desc = "Code Companion: Toggle",
       },
     },
   },
-  keys = {
-    {
-      "<leader>ca",
-      "<cmd>CodeCompanionActions<cr>",
-      mode = { "n", "v" },
-      desc = "Code Companion: Actions",
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown", "codecompanion" },
+  },
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    opts = {
+      preview = {
+        filetypes = { "markdown", "codecompanion" },
+        ignore_buftypes = {},
+      },
     },
-    {
-      "<leader>cc",
-      "<cmd>CodeCompanionChat<cr>",
-      desc = "Code Companion: Chat",
-    },
-    {
-      "<leader>ct",
-      "<cmd>CodeCompanionChat Toggle<cr>",
-      desc = "Code Companion: Toggle",
+  },
+  {
+    "echasnovski/mini.diff",
+    config = function()
+      local diff = require("mini.diff")
+      diff.setup({
+        -- Disabled by default
+        source = diff.gen_source.none(),
+      })
+    end,
+  },
+  {
+    "HakonHarnes/img-clip.nvim",
+    opts = {
+      filetypes = {
+        codecompanion = {
+          prompt_for_file_name = false,
+          template = "[Image]($FILE_PATH)",
+          use_absolute_path = true,
+        },
+      },
     },
   },
 }
