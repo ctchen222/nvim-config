@@ -36,12 +36,12 @@ return {
         keymaps = {
           accept_change = {
             modes = { n = "gda", v = "ga" },
-            description = "Accept the suggested change",
+            description = "Accept change (all in normal, selection in visual)",
           },
           reject_change = {
-            modes = { n = "gr" },
+            modes = { n = "gdr", v = "gr" },
             opts = { nowait = true },
-            description = "Reject the suggested change",
+            description = "Reject change (all in normal, selection in visual)",
           },
         },
         show_keymaps = true,
