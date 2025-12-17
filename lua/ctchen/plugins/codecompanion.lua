@@ -1,6 +1,7 @@
 return {
   {
     "olimorris/codecompanion.nvim",
+    -- dir = "/Users/ctchen/Development/open-source/codecompanion.nvim",
     version = "v17.33.0",
     cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionActions" },
     ft = { "codecompanion" },
@@ -8,7 +9,7 @@ return {
       "nvim-lua/plenary.nvim",
     },
     opts = {
-      language = "Traditional Chinese",
+      language = "Tranditional Chinese",
       adapters = {
         -- anthropic = {
         --   api_key = os.getenv("ANTHROPIC_API_KEY"),
@@ -21,16 +22,20 @@ return {
             key = "<C-s>",
           },
           -- adapter = "anthropic",
+          model = "claude-sonnet-4-5-20250929",
+          -- language = "繁體中文",
+        },
+        inline = {
           adapter = "copilot",
-          model = "claude-sonnet-4-20250514",
+          model = "claude-sonnet-4-5-20250929",
         },
       },
       inline = {
         adapter = "copilot",
-        model = "claude-3-haiku-20240307",
+        model = "claude-sonnet-4-5-20250929",
         keymaps = {
           accept_change = {
-            modes = { n = "ga" },
+            modes = { n = "gda", v = "ga" },
             description = "Accept the suggested change",
           },
           reject_change = {
@@ -39,6 +44,7 @@ return {
             description = "Reject the suggested change",
           },
         },
+        show_keymaps = true,
       },
     },
     keys = {
