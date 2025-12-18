@@ -1,0 +1,21 @@
+return {
+  "vimwiki/vimwiki",
+  event = "BufEnter *.wiki",
+  keys = {
+    { "<leader>ww", "<cmd>VimwikiIndex<cr>", desc = "Open Vimwiki index" },
+    { "<leader>wt", "<cmd>VimwikiTabIndex<cr>", desc = "Open Vimwiki index in new tab" },
+    { "<leader>ws", "<cmd>VimwikiUISelect<cr>", desc = "Select Vimwiki" },
+    { "<leader>wi", "<cmd>VimwikiDiaryIndex<cr>", desc = "Open diary index" },
+    { "<leader>wn", "<cmd>VimwikiMakeDiaryNote<cr>", desc = "Create diary note for today" },
+  },
+  init = function()
+    vim.g.vimwiki_list = {
+      {
+        path = "~/vimwiki/",
+        syntax = "markdown",
+        ext = ".md",
+      },
+    }
+    vim.g.vimwiki_global_ext = 0
+  end,
+}
