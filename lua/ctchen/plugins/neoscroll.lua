@@ -1,9 +1,11 @@
 return {
   "karb94/neoscroll.nvim",
+  event = "VeryLazy",
   opts = {
-    disable_default_mappings = true,
+    mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-e>", "zt", "zz", "zb" },
+    hide_cursor = true,
+    stop_eof = true,
+    respect_scrolloff = false,
+    cursor_scrolls_alone = true,
   },
-  config = function()
-    vim.keymap.set({ "x", "s" }, "<C-y>", "<Nop>", { silent = true, noremap = true })
-  end,
 }
