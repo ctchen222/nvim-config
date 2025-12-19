@@ -5,6 +5,7 @@ return {
   dependencies = {
     "hrsh7th/cmp-buffer", -- source for text in buffer
     "hrsh7th/cmp-path", -- source for file system paths
+    "hrsh7th/cmp-nvim-lsp-signature-help", -- function signature help
     "f3fora/cmp-spell",
     {
       "L3MON4D3/LuaSnip",
@@ -25,6 +26,14 @@ return {
     local has_luasnip, luasnip = pcall(require, "luasnip")
     local lspkind = require("lspkind")
     local colorizer = require("tailwindcss-colorizer-cmp").formatter
+
+    -- Custom highlight groups for completion menu
+    vim.api.nvim_set_hl(0, "CmpPmenu", { link = "NormalFloat" })
+    vim.api.nvim_set_hl(0, "CmpBorder", { link = "FloatBorder" })
+    vim.api.nvim_set_hl(0, "CmpSel", { link = "PmenuSel" })
+    vim.api.nvim_set_hl(0, "CmpDoc", { link = "NormalFloat" })
+    vim.api.nvim_set_hl(0, "CmpDocBorder", { link = "FloatBorder" })
+    vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment" })
 
     local rhs = function(keys)
       return vim.api.nvim_replace_termcodes(keys, true, true, true)
@@ -203,19 +212,24 @@ return {
 
     cmp.setup({
       experimental = {
-        -- HACK: experimenting with ghost text
-        -- look at `toggle_ghost_text()` function below.
-        ghost_text = false,
+        ghost_text = { hl_group = "CmpGhostText" },
       },
       completion = {
         completeopt = "menu,menuone,noinsert",
       },
       window = {
         documentation = {
-          border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+          border = "rounded",
+          winhighlight = "Normal:CmpDoc,FloatBorder:CmpDocBorder",
+          max_width = 80,
+          max_height = 20,
         },
         completion = {
-          border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
+          border = "rounded",
+          winhighlight = "Normal:CmpPmenu,FloatBorder:CmpBorder,CursorLine:CmpSel,Search:None",
+          scrollbar = true,
+          col_offset = -3,
+          side_padding = 1,
         },
       },
       -- config nvim cmp to work with snippet engine
@@ -224,12 +238,27 @@ return {
           luasnip.lsp_expand(args.body)
         end,
       },
+      -- sorting configuration for better relevance
+      sorting = {
+        priority_weight = 2,
+        comparators = {
+          cmp.config.compare.offset,
+          cmp.config.compare.exact,
+          cmp.config.compare.score,
+          cmp.config.compare.recently_used,
+          cmp.config.compare.locality,
+          cmp.config.compare.kind,
+          cmp.config.compare.length,
+          cmp.config.compare.order,
+        },
+      },
       -- autocompletion sources
       sources = cmp.config.sources({
+        { name = "nvim_lsp_signature_help" }, -- function signature help (highest priority)
         { name = "luasnip" }, -- snippets
         { name = "lazydev" },
         { name = "nvim_lsp" },
-        { name = "buffer" }, -- text within current buffer
+        { name = "buffer", keyword_length = 3 }, -- text within current buffer (require 3 chars)
         { name = "path" }, -- file system paths
         { name = "tailwindcss-colorizer-cmp" },
         {
