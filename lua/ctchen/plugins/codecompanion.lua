@@ -1,7 +1,6 @@
 return {
   {
     "olimorris/codecompanion.nvim",
-    -- dir = "/Users/ctchen/Development/open-source/codecompanion.nvim",
     version = "v17.33.0",
     cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionActions" },
     ft = { "codecompanion" },
@@ -9,21 +8,17 @@ return {
       "nvim-lua/plenary.nvim",
     },
     opts = {
-      language = "Tranditional Chinese",
-      adapters = {
-        -- anthropic = {
-        --   api_key = os.getenv("ANTHROPIC_API_KEY"),
-        -- },
+      opts = {
+        language = "Traditional Chinese",
       },
+      adapters = {},
       strategies = {
         chat = {
           send = {
             modes = { "n", "i" },
             key = "<C-s>",
           },
-          -- adapter = "anthropic",
           model = "claude-sonnet-4-5-20250929",
-          -- language = "繁體中文",
         },
         inline = {
           adapter = "copilot",
@@ -46,6 +41,57 @@ return {
         },
         show_keymaps = true,
       },
+      -- 自定義 commit message prompt，使用英文
+      prompt_library = {
+        ["Commit Message"] = {
+          strategy = "chat",
+          description = "Generate a commit message (English)",
+          opts = {
+            short_name = "commit",
+            auto_submit = true,
+          },
+          prompts = {
+            {
+              role = "system",
+              content = [[You are an expert at writing git commit messages following the Conventional Commit specification.
+Always respond in English only, regardless of the user's language setting.
+
+Rules:
+- Use conventional commit format: type(scope): description
+- Types: feat, fix, docs, style, refactor, perf, test, chore
+- Keep the subject line under 50 characters
+- Use imperative mood ("add" not "added")
+- Output only the commit message without any explanations]],
+            },
+            {
+              role = "user",
+              content = function()
+                local diff = vim.fn.system("git diff --no-ext-diff --staged")
+                if diff == "" then
+                  return "No staged changes found. Please stage your changes first with `git add`."
+                end
+                return string.format(
+                  [[Generate a commit message for the following staged changes:
+
+```diff
+%s
+```
+
+Recent commit messages for reference:
+```
+%s
+```]],
+                  diff,
+                  vim.fn.system("git log --pretty=format:'%s' -n 10")
+                )
+              end,
+              opts = {
+                contains_code = true,
+              },
+            },
+          },
+        },
+      },
     },
     keys = {
       {
@@ -66,13 +112,10 @@ return {
       },
     },
   },
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown", "codecompanion" },
-  },
+  -- 移除 render-markdown.nvim，只保留 markview.nvim（功能更完整）
   {
     "OXY2DEV/markview.nvim",
-    lazy = false,
+    ft = { "markdown", "codecompanion" },
     opts = {
       preview = {
         filetypes = { "markdown", "codecompanion" },
@@ -82,16 +125,20 @@ return {
   },
   {
     "echasnovski/mini.diff",
+    ft = { "codecompanion" },
     config = function()
       local diff = require("mini.diff")
       diff.setup({
-        -- Disabled by default
         source = diff.gen_source.none(),
       })
     end,
   },
   {
     "HakonHarnes/img-clip.nvim",
+    ft = { "codecompanion", "markdown" },
+    keys = {
+      { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from clipboard" },
+    },
     opts = {
       filetypes = {
         codecompanion = {
