@@ -125,6 +125,8 @@ return {
         ["tailwindcss"] = function()
           lspconfig["tailwindcss"].setup({
             capabilities = capabilities,
+            on_attach = lsp_attach,
+            -- 移除純 typescript/javascript，只在有 HTML/JSX 的檔案啟用
             filetypes = {
               "html",
               "typescriptreact",
@@ -132,8 +134,7 @@ return {
               "css",
               "sass",
               "scss",
-              "typescript",
-              "javascript",
+              "svelte",
               "heex",
               "phoenix-heex",
               "eruby",
@@ -149,7 +150,42 @@ return {
         ["tsserver"] = function()
           lspconfig["tsserver"].setup({
             capabilities = capabilities,
+            on_attach = lsp_attach,
             filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+            settings = {
+              typescript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = "none",
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                  includeInlayFunctionParameterTypeHints = false,
+                  includeInlayVariableTypeHints = false,
+                  includeInlayPropertyDeclarationTypeHints = false,
+                  includeInlayFunctionLikeReturnTypeHints = false,
+                  includeInlayEnumMemberValueHints = false,
+                },
+              },
+              javascript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = "none",
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                  includeInlayFunctionParameterTypeHints = false,
+                  includeInlayVariableTypeHints = false,
+                  includeInlayPropertyDeclarationTypeHints = false,
+                  includeInlayFunctionLikeReturnTypeHints = false,
+                  includeInlayEnumMemberValueHints = false,
+                },
+              },
+            },
+            -- 優化效能：限制初始化行為
+            init_options = {
+              preferences = {
+                disableSuggestions = false,
+                includeCompletionsForModuleExports = true,
+                includeCompletionsWithSnippetText = true,
+                includeAutomaticOptionalChainCompletions = true,
+              },
+              maxTsServerMemory = 4096,
+            },
           })
         end,
         -- Default handler for all other servers

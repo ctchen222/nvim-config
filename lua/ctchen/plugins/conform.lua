@@ -16,7 +16,9 @@ return {
     formatters_by_ft = {
       lua = { "stylua" },
       javascript = { "prettier" },
-      typescript = { "eslint" },
+      javascriptreact = { "prettier" },
+      typescript = { "prettier" },
+      typescriptreact = { "prettier" },
       go = { "goimports" },
       cs = { "csharpier" },
       xml = { "xmlformatter" },

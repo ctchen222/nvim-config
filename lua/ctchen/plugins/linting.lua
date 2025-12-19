@@ -6,8 +6,9 @@ return {
 
     lint.linters_by_ft = {
       javascript = { "eslint_d" },
-      typescript = { "eslint" },
-      javascriptreact = { "eslint" },
+      typescript = { "eslint_d" },
+      javascriptreact = { "eslint_d" },
+      typescriptreact = { "eslint_d" },
       python = { "pylint" },
       markdown = { "vale" },
       sql = { "sqlfluff" },
@@ -15,10 +16,14 @@ return {
 
     local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
-    vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+    -- 移除 BufEnter 以提升效能，只在儲存和離開 insert mode 時 lint
+    vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
       group = lint_augroup,
       callback = function()
-        lint.try_lint()
+        -- 延遲執行以避免阻塞
+        vim.defer_fn(function()
+          lint.try_lint()
+        end, 100)
       end,
     })
 
