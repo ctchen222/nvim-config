@@ -46,6 +46,7 @@ return {
         "gomod",
         "gosum",
         "gotmpl",
+        "python",
       },
       incremental_selection = {
         enable = true,

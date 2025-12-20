@@ -25,6 +25,7 @@ return {
       sql = { "sqlfluff" },
       mysql = { "sqlfluff" },
       plsql = { "sqlfluff" },
+      python = { "ruff_format", "ruff_organize_imports" },
     },
     formatters = {
       sqlfluff = {

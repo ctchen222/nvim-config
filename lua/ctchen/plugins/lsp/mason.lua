@@ -179,9 +179,7 @@ return {
       ensure_installed = {
         "prettier", -- prettier formatter
         "stylua", -- lua formatter
-        "isort", -- python formatter
-        "black", -- python formatter
-        "pylint",
+        "ruff", -- python linter + formatter (replaces isort, black, pylint)
         "eslint_d",
         "sqlfluff", -- sql formatter
       },
