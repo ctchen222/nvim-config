@@ -91,6 +91,73 @@ Recent commit messages for reference:
             },
           },
         },
+        ["Branch Name"] = {
+          strategy = "chat",
+          description = "Generate a git branch name (English)",
+          opts = {
+            short_name = "branch",
+            auto_submit = true,
+          },
+          prompts = {
+            {
+              role = "system",
+              content = function()
+                return string.format([[You are an expert at creating git branch names following best practices.
+Always respond in English only, regardless of the user's language setting.
+
+Rules:
+- Use format: type/yymmdd-short-description
+- Today's date is: %s
+- Types: feature, bugfix, hotfix, refactor, docs, test, chore
+- Use lowercase letters, numbers, and hyphens only
+- Keep description concise (2-4 words separated by hyphens)
+- No special characters or spaces
+- Output only the branch name without any explanations or backticks
+
+Example: feature/%s-add-user-auth]], os.date("%y%m%d"), os.date("%y%m%d"))
+              end,
+            },
+            {
+              role = "user",
+              content = function()
+                -- Check for staged or unstaged changes
+                local staged = vim.fn.system("git diff --no-ext-diff --staged --stat")
+                local unstaged = vim.fn.system("git diff --no-ext-diff --stat")
+                local untracked = vim.fn.system("git ls-files --others --exclude-standard")
+
+                local context = ""
+                if staged ~= "" then
+                  context = context .. "Staged changes:\n" .. staged .. "\n"
+                end
+                if unstaged ~= "" then
+                  context = context .. "Unstaged changes:\n" .. unstaged .. "\n"
+                end
+                if untracked ~= "" then
+                  context = context .. "New files:\n" .. untracked .. "\n"
+                end
+
+                if context == "" then
+                  return "No changes detected. Please describe what you're working on:"
+                end
+
+                return string.format(
+                  [[Generate a branch name based on these changes:
+
+%s
+Recent branch names for reference:
+```
+%s
+```]],
+                  context,
+                  vim.fn.system("git branch --sort=-committerdate --format='%(refname:short)' | head -10")
+                )
+              end,
+              opts = {
+                contains_code = true,
+              },
+            },
+          },
+        },
       },
     },
     keys = {
