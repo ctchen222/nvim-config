@@ -147,6 +147,35 @@ return {
             filetypes = { "html", "htmldjango", "templ" },
           })
         end,
+        ["sqls"] = function()
+          lspconfig["sqls"].setup({
+            capabilities = capabilities,
+            on_attach = function(client, bufnr)
+              lsp_attach(client, bufnr)
+              -- sqls specific keymaps
+              local opts = { buffer = bufnr, silent = true }
+              vim.keymap.set("n", "<leader>se", "<cmd>SqlsExecuteQuery<CR>", { buffer = bufnr, desc = "Execute SQL query" })
+              vim.keymap.set("v", "<leader>se", "<cmd>SqlsExecuteQuery<CR>", { buffer = bufnr, desc = "Execute selected SQL" })
+              vim.keymap.set("n", "<leader>sd", "<cmd>SqlsSwitchDatabase<CR>", { buffer = bufnr, desc = "Switch database" })
+              vim.keymap.set("n", "<leader>sc", "<cmd>SqlsSwitchConnection<CR>", { buffer = bufnr, desc = "Switch connection" })
+            end,
+            settings = {
+              sqls = {
+                connections = {
+                  -- Add your database connections here, e.g.:
+                  -- {
+                  --   driver = "postgresql",
+                  --   dataSourceName = "host=localhost port=5432 user=postgres password=pass dbname=mydb sslmode=disable",
+                  -- },
+                  -- {
+                  --   driver = "mysql",
+                  --   dataSourceName = "user:password@tcp(localhost:3306)/dbname",
+                  -- },
+                },
+              },
+            },
+          })
+        end,
         ["tsserver"] = function()
           lspconfig["tsserver"].setup({
             capabilities = capabilities,

@@ -23,6 +23,13 @@ return {
       cs = { "csharpier" },
       xml = { "xmlformatter" },
       sql = { "sqlfluff" },
+      mysql = { "sqlfluff" },
+      plsql = { "sqlfluff" },
+    },
+    formatters = {
+      sqlfluff = {
+        args = { "format", "--dialect", "postgres", "-" },
+      },
     },
     default_format_opts = {
       lsp_format = "fallback",

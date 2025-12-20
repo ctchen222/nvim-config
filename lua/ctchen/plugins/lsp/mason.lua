@@ -171,7 +171,7 @@ return {
         "emmet_ls",
         "prismals",
         "pyright",
-        "sqlls",
+        "sqls",
       },
     })
 
