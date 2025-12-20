@@ -230,14 +230,18 @@ return {
     keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
     keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
     keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
-    keymap.set("n", "<leader>fd", "<cmd>Telescope lsp_definitions<cr>", { desc = "Find Original Code" })
-    keymap.set("n", "<leader>fe", "<cmd>Telescope diagnostics<cr>", { desc = "Find Implementations" })
-    keymap.set("n", "<leader>fi", "<cmd>Telescope lsp_implementations<cr>", { desc = "Find Implementations" })
+    keymap.set("n", "<leader>fd", "<cmd>Telescope lsp_definitions<cr>", { desc = "Find definition" })
+    keymap.set(
+      "n",
+      "<leader>fD",
+      "<cmd>Telescope lsp_definitions jump_type=vsplit<cr>",
+      { desc = "Find definition (vsplit)" }
+    )
+    keymap.set("n", "<leader>fe", "<cmd>Telescope diagnostics<cr>", { desc = "Find diagnostics" })
 
     -- LSP code tracing
     keymap.set("n", "<leader>fT", "<cmd>Telescope lsp_type_definitions<cr>", { desc = "Find type definition" })
-    keymap.set("n", "<leader>fI", "<cmd>Telescope lsp_incoming_calls<cr>", { desc = "Incoming calls" })
-    keymap.set("n", "<leader>fC", "<cmd>Telescope lsp_outgoing_calls<cr>", { desc = "Outgoing calls" })
+    keymap.set("n", "<leader>f<", "<cmd>Telescope lsp_incoming_calls<cr>", { desc = "Incoming calls" })
 
     -- Navigation
     keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find buffers" })
