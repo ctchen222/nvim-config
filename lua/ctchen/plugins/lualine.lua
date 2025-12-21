@@ -5,6 +5,25 @@ return {
     local lualine = require("lualine")
     local lazy_status = require("lazy.status") -- to configure lazy pending updates count
 
+    -- CodeCompanion spinner state
+    local codecompanion_processing = false
+
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "CodeCompanionRequestStarted",
+      callback = function()
+        codecompanion_processing = true
+        vim.cmd("redrawstatus")
+      end,
+    })
+
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "CodeCompanionRequestFinished",
+      callback = function()
+        codecompanion_processing = false
+        vim.cmd("redrawstatus")
+      end,
+    })
+
     local colors = {
       blue = "#65D1FF",
       green = "#3EFFDC",
@@ -56,6 +75,18 @@ return {
       },
       sections = {
         lualine_x = {
+          {
+            function()
+              local spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+              local ms = vim.uv.hrtime() / 1000000
+              local frame = math.floor(ms / 80) % #spinners
+              return spinners[frame + 1] .. " AI"
+            end,
+            cond = function()
+              return codecompanion_processing
+            end,
+            color = { fg = "#3EFFDC" },
+          },
           {
             lazy_status.updates,
             cond = lazy_status.has_updates,
