@@ -217,6 +217,23 @@ return {
             },
           })
         end,
+        ["eslint"] = function()
+          lspconfig["eslint"].setup({
+            capabilities = capabilities,
+            on_attach = function(client, bufnr)
+              lsp_attach(client, bufnr)
+              -- Auto-fix on save
+              vim.api.nvim_create_autocmd("BufWritePre", {
+                buffer = bufnr,
+                command = "EslintFixAll",
+              })
+            end,
+            filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+            settings = {
+              workingDirectories = { mode = "auto" },
+            },
+          })
+        end,
         -- Default handler for all other servers
         function(server_name)
           lspconfig[server_name].setup({

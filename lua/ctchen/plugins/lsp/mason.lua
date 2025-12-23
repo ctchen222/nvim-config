@@ -172,6 +172,7 @@ return {
         "prismals",
         "pyright",
         "sqls",
+        "eslint", -- ESLint LSP server (faster than eslint_d)
       },
     })
 
@@ -180,7 +181,7 @@ return {
         "prettier", -- prettier formatter
         "stylua", -- lua formatter
         "ruff", -- python linter + formatter (replaces isort, black, pylint)
-        "eslint_d",
+        -- "eslint_d", -- Replaced by ESLint LSP server
         "sqlfluff", -- sql formatter
       },
     })
