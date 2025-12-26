@@ -176,47 +176,43 @@ return {
             },
           })
         end,
-        ["tsserver"] = function()
-          lspconfig["tsserver"].setup({
+        -- vtsls: faster TypeScript language server (replaces tsserver)
+        ["vtsls"] = function()
+          lspconfig["vtsls"].setup({
             capabilities = capabilities,
             on_attach = lsp_attach,
             filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
             settings = {
               typescript = {
                 inlayHints = {
-                  includeInlayParameterNameHints = "none",
-                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                  includeInlayFunctionParameterTypeHints = false,
-                  includeInlayVariableTypeHints = false,
-                  includeInlayPropertyDeclarationTypeHints = false,
-                  includeInlayFunctionLikeReturnTypeHints = false,
-                  includeInlayEnumMemberValueHints = false,
+                  parameterNames = { enabled = "none" },
+                  parameterTypes = { enabled = false },
+                  variableTypes = { enabled = false },
+                  propertyDeclarationTypes = { enabled = false },
+                  functionLikeReturnTypes = { enabled = false },
+                  enumMemberValues = { enabled = false },
                 },
+                updateImportsOnFileMove = { enabled = "always" },
               },
               javascript = {
                 inlayHints = {
-                  includeInlayParameterNameHints = "none",
-                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                  includeInlayFunctionParameterTypeHints = false,
-                  includeInlayVariableTypeHints = false,
-                  includeInlayPropertyDeclarationTypeHints = false,
-                  includeInlayFunctionLikeReturnTypeHints = false,
-                  includeInlayEnumMemberValueHints = false,
+                  parameterNames = { enabled = "none" },
+                  parameterTypes = { enabled = false },
+                  variableTypes = { enabled = false },
+                  propertyDeclarationTypes = { enabled = false },
+                  functionLikeReturnTypes = { enabled = false },
+                  enumMemberValues = { enabled = false },
                 },
+                updateImportsOnFileMove = { enabled = "always" },
               },
-            },
-            -- 優化效能：限制初始化行為
-            init_options = {
-              preferences = {
-                disableSuggestions = false,
-                includeCompletionsForModuleExports = true,
-                includeCompletionsWithSnippetText = true,
-                includeAutomaticOptionalChainCompletions = true,
+              vtsls = {
+                autoUseWorkspaceTsdk = true,
               },
-              maxTsServerMemory = 4096,
             },
           })
         end,
+        -- Keep tsserver handler disabled (replaced by vtsls)
+        ["tsserver"] = function() end,
         ["eslint"] = function()
           lspconfig["eslint"].setup({
             capabilities = capabilities,
