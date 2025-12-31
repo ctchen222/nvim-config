@@ -231,12 +231,13 @@ return {
     keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
     keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
     keymap.set("n", "<leader>fd", "<cmd>Telescope lsp_definitions<cr>", { desc = "Find definition" })
-    keymap.set(
-      "n",
-      "<leader>fD",
-      "<cmd>Telescope lsp_definitions jump_type=vsplit<cr>",
-      { desc = "Find definition (vsplit)" }
-    )
+    keymap.set("n", "<leader>fD", function()
+      vim.cmd("vsplit")
+      require("telescope.builtin").lsp_definitions({
+        theme = "dropdown",
+        previewer = false,
+      })
+    end, { desc = "Find definition (vsplit)" })
     keymap.set("n", "<leader>fe", "<cmd>Telescope diagnostics<cr>", { desc = "Find diagnostics" })
 
     -- LSP code tracing
