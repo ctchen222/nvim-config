@@ -213,6 +213,45 @@ return {
         end,
         -- Keep tsserver handler disabled (replaced by vtsls)
         ["tsserver"] = function() end,
+        ["yamlls"] = function()
+          lspconfig["yamlls"].setup({
+            capabilities = capabilities,
+            on_attach = lsp_attach,
+            settings = {
+              yaml = {
+                schemas = {
+                  ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+                  ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
+                  ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
+                  ["https://json.schemastore.org/helmfile.json"] = "helmfile*.{yml,yaml}",
+                  ["https://json.schemastore.org/chart.json"] = "Chart.{yml,yaml}",
+                  ["https://json.schemastore.org/kustomization.json"] = "kustomization.{yml,yaml}",
+                  kubernetes = {
+                    "**/deployment*.yaml",
+                    "**/service*.yaml",
+                    "**/configmap*.yaml",
+                    "**/secret*.yaml",
+                    "**/ingress*.yaml",
+                    "**/pod*.yaml",
+                    "**/namespace*.yaml",
+                    "**/statefulset*.yaml",
+                    "**/daemonset*.yaml",
+                    "**/cronjob*.yaml",
+                    "**/job*.yaml",
+                    "**/pv*.yaml",
+                    "**/pvc*.yaml",
+                    "**/role*.yaml",
+                    "**/clusterrole*.yaml",
+                    "**/serviceaccount*.yaml",
+                  },
+                },
+                validate = true,
+                completion = true,
+                hover = true,
+              },
+            },
+          })
+        end,
         ["eslint"] = function()
           lspconfig["eslint"].setup({
             capabilities = capabilities,

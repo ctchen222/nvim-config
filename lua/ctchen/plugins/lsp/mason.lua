@@ -174,6 +174,7 @@ return {
         "pyright",
         "sqls",
         "eslint", -- ESLint LSP server (faster than eslint_d)
+        "yamlls", -- YAML language server (Kubernetes, Docker Compose, etc.)
       },
     })
 
