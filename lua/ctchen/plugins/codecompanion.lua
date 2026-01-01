@@ -102,7 +102,8 @@ Recent commit messages for reference:
             {
               role = "system",
               content = function()
-                return string.format([[You are an expert at creating git branch names following best practices.
+                return string.format(
+                  [[You are an expert at creating git branch names following best practices.
 Always respond in English only, regardless of the user's language setting.
 
 Rules:
@@ -114,7 +115,10 @@ Rules:
 - No special characters or spaces
 - Output only the branch name without any explanations or backticks
 
-Example: feature/%s-add-user-auth]], os.date("%y%m%d"), os.date("%y%m%d"))
+Example: feature/%s-add-user-auth]],
+                  os.date("%y%m%d"),
+                  os.date("%y%m%d")
+                )
               end,
             },
             {
@@ -158,6 +162,54 @@ Recent branch names for reference:
             },
           },
         },
+        ["Optimize Code"] = {
+          strategy = "chat",
+          description = "Analyze and suggest optimizations for selected code",
+          opts = {
+            modes = { "v" },
+            short_name = "optimize",
+            auto_submit = true,
+          },
+          prompts = {
+            {
+              role = "system",
+              content = [[You are an expert code reviewer focused on performance and code quality.
+Always respond in English.
+
+When analyzing code, consider:
+- Time and space complexity improvements
+- Readability and maintainability
+- Potential bugs or edge cases
+- Language-specific best practices and idioms
+- Unnecessary computations or redundant operations
+
+Format your response as:
+1. **Assessment** - Quick verdict: Is optimization needed? (Yes/No/Minor tweaks)
+2. **Issues Found** - List specific problems (skip if none)
+3. **Optimized Code** - Provide improved version with comments on changes
+4. **Explanation** - Briefly explain the improvements and their impact]],
+            },
+            {
+              role = "user",
+              content = function(context)
+                local code = require("codecompanion.helpers.actions").get_code(context.start_line, context.end_line)
+                return string.format(
+                  [[Please analyze and optimize this %s code:
+
+```%s
+%s
+```]],
+                  context.filetype,
+                  context.filetype,
+                  code
+                )
+              end,
+              opts = {
+                contains_code = true,
+              },
+            },
+          },
+        },
       },
     },
     keys = {
@@ -176,6 +228,12 @@ Recent branch names for reference:
         "<leader>ct",
         "<cmd>CodeCompanionChat Toggle<cr>",
         desc = "Code Companion: Toggle",
+      },
+      {
+        "<leader>co",
+        "<cmd>CodeCompanion /optimize<cr>",
+        mode = "v",
+        desc = "Code Companion: Optimize Selection",
       },
     },
   },
