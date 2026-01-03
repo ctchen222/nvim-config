@@ -7,6 +7,32 @@ return {
     -- neodev.nvim is removed as we are configuring lua_ls manually.
   },
   config = function()
+    -- Configure diagnostics display
+    vim.diagnostic.config({
+      virtual_text = {
+        prefix = "●", -- or "■", "▎", "x"
+        source = "if_many", -- show source if multiple diagnostics
+        spacing = 4,
+      },
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = " ",
+          [vim.diagnostic.severity.WARN] = " ",
+          [vim.diagnostic.severity.HINT] = "󰠠 ",
+          [vim.diagnostic.severity.INFO] = " ",
+        },
+      },
+      underline = true,
+      update_in_insert = false, -- don't update while typing
+      severity_sort = true, -- show errors first
+      float = {
+        border = "rounded",
+        source = true,
+        header = "",
+        prefix = "",
+      },
+    })
+
     -- import lspconfig plugin
     local lspconfig = require("lspconfig")
 
