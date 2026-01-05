@@ -210,6 +210,19 @@ return {
             filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
             settings = {
               typescript = {
+                tsserver = {
+                  -- 增加記憶體限制，大型專案必須
+                  maxTsServerMemory = 4096,
+                  -- 優化檔案監視，排除 node_modules
+                  watchOptions = {
+                    watchFile = "useFsEvents",
+                    watchDirectory = "useFsEvents",
+                    fallbackPolling = "dynamicPriorityPolling",
+                    synchronousWatchDirectory = false,
+                    excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/build" },
+                  },
+                },
+                -- 關閉 inlay hints 減少計算負擔
                 inlayHints = {
                   parameterNames = { enabled = "none" },
                   parameterTypes = { enabled = false },
@@ -219,8 +232,23 @@ return {
                   enumMemberValues = { enabled = false },
                 },
                 updateImportsOnFileMove = { enabled = "always" },
+                -- 減少不必要的功能
+                suggestionActions = { enabled = false },
+                preferences = {
+                  importModuleSpecifier = "relative",
+                },
               },
               javascript = {
+                tsserver = {
+                  maxTsServerMemory = 4096,
+                  watchOptions = {
+                    watchFile = "useFsEvents",
+                    watchDirectory = "useFsEvents",
+                    fallbackPolling = "dynamicPriorityPolling",
+                    synchronousWatchDirectory = false,
+                    excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/build" },
+                  },
+                },
                 inlayHints = {
                   parameterNames = { enabled = "none" },
                   parameterTypes = { enabled = false },
@@ -230,9 +258,17 @@ return {
                   enumMemberValues = { enabled = false },
                 },
                 updateImportsOnFileMove = { enabled = "always" },
+                suggestionActions = { enabled = false },
               },
               vtsls = {
                 autoUseWorkspaceTsdk = true,
+                experimental = {
+                  -- 啟用伺服器端模糊匹配，加速補全
+                  completion = {
+                    enableServerSideFuzzyMatch = true,
+                    entriesLimit = 50, -- 限制補全項目數量
+                  },
+                },
               },
             },
           })
@@ -281,17 +317,17 @@ return {
         ["eslint"] = function()
           lspconfig["eslint"].setup({
             capabilities = capabilities,
-            on_attach = function(client, bufnr)
-              lsp_attach(client, bufnr)
-              -- Auto-fix on save
-              vim.api.nvim_create_autocmd("BufWritePre", {
-                buffer = bufnr,
-                command = "EslintFixAll",
-              })
-            end,
+            on_attach = lsp_attach, -- 使用標準 attach，不再自動修復
             filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
             settings = {
               workingDirectories = { mode = "auto" },
+              -- 減少 ESLint 的工作負擔
+              codeAction = {
+                disableRuleComment = { enable = false },
+                showDocumentation = { enable = true },
+              },
+              -- 只在需要時驗證，不要太頻繁
+              run = "onSave", -- 改為儲存時才執行，而非即時
             },
           })
         end,
