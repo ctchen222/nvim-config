@@ -2,7 +2,7 @@ return {
   {
     "olimorris/codecompanion.nvim",
     version = "v17.33.0",
-    cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionActions" },
+    cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionActions", "CodeCompanionCmd" },
     ft = { "codecompanion" },
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -228,6 +228,12 @@ Format your response as:
         "<leader>ct",
         "<cmd>CodeCompanionChat Toggle<cr>",
         desc = "Code Companion: Toggle",
+      },
+      {
+        "<leader>ci",
+        "<cmd>CodeCompanion<cr>",
+        mode = { "n", "v" },
+        desc = "Code Companion: Inline prompt",
       },
       {
         "<leader>co",
