@@ -162,6 +162,47 @@ Recent branch names for reference:
             },
           },
         },
+        ["Explain Code"] = {
+          strategy = "chat",
+          description = "Explain the selected code in detail",
+          opts = {
+            modes = { "v" },
+            short_name = "explain",
+            auto_submit = true,
+          },
+          prompts = {
+            {
+              role = "system",
+              content = [[You are an expert programmer and technical educator.
+Explain code clearly and concisely, suitable for developers who want to understand the logic.
+
+Format your response as:
+1. **Summary** - One sentence overview of what the code does
+2. **Step-by-Step Breakdown** - Explain each significant part
+3. **Key Concepts** - Highlight any patterns, algorithms, or important concepts used
+4. **Potential Improvements** - Brief suggestions if any (optional)]],
+            },
+            {
+              role = "user",
+              content = function(context)
+                local code = require("codecompanion.helpers.actions").get_code(context.start_line, context.end_line)
+                return string.format(
+                  [[Please explain this %s code:
+
+```%s
+%s
+```]],
+                  context.filetype,
+                  context.filetype,
+                  code
+                )
+              end,
+              opts = {
+                contains_code = true,
+              },
+            },
+          },
+        },
         ["Optimize Code"] = {
           strategy = "chat",
           description = "Analyze and suggest optimizations for selected code",
@@ -247,6 +288,12 @@ Format your response as:
         "<cmd>CodeCompanion /optimize<cr>",
         mode = "v",
         desc = "Code Companion: Optimize Selection",
+      },
+      {
+        "<leader>ce",
+        "<cmd>CodeCompanion /explain<cr>",
+        mode = "v",
+        desc = "Code Companion: Explain Selection",
       },
     },
   },
