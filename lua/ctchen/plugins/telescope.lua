@@ -238,6 +238,13 @@ return {
         previewer = false,
       })
     end, { desc = "Find definition (vsplit)" })
+    keymap.set("n", "<leader>fS", function()
+      vim.cmd("split")
+      require("telescope.builtin").lsp_definitions({
+        theme = "dropdown",
+        previewer = false,
+      })
+    end, { desc = "Find definition (split horizontal)" })
     keymap.set("n", "<leader>fe", "<cmd>Telescope diagnostics<cr>", { desc = "Find diagnostics" })
 
     -- LSP code tracing
