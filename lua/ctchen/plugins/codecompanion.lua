@@ -227,7 +227,14 @@ Format your response as:
       {
         "<leader>ct",
         "<cmd>CodeCompanionChat Toggle<cr>",
-        desc = "Code Companion: Toggle",
+        mode = "n",
+        desc = "Code Companion: Toggle Chat",
+      },
+      {
+        "<leader>ct",
+        "<cmd>CodeCompanionChat Add<cr>",
+        mode = "v",
+        desc = "Code Companion: Add Selection to Chat",
       },
       {
         "<leader>ci",
