@@ -275,6 +275,8 @@ return {
         end,
         -- Keep tsserver handler disabled (replaced by vtsls)
         ["tsserver"] = function() end,
+        -- Skip jdtls here, nvim-jdtls plugin handles it
+        ["jdtls"] = function() end,
         ["yamlls"] = function()
           lspconfig["yamlls"].setup({
             capabilities = capabilities,

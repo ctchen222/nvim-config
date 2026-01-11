@@ -175,6 +175,7 @@ return {
         "sqls",
         "eslint", -- ESLint LSP server (faster than eslint_d)
         "yamlls", -- YAML language server (Kubernetes, Docker Compose, etc.)
+        "jdtls", -- Java language server
       },
     })
 
@@ -185,6 +186,10 @@ return {
         "ruff", -- python linter + formatter (replaces isort, black, pylint)
         -- "eslint_d", -- Replaced by ESLint LSP server
         "sqlfluff", -- sql formatter
+        -- Java tools
+        "google-java-format", -- java formatter
+        "java-debug-adapter", -- java debugger
+        "java-test", -- java test runner
       },
     })
   end,
