@@ -208,12 +208,13 @@ return {
             capabilities = capabilities,
             on_attach = lsp_attach,
             filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+            -- 只在有 tsconfig/package.json 的專案啟動，單檔案不啟動
+            single_file_support = false,
+            root_dir = require("lspconfig.util").root_pattern("tsconfig.json", "jsconfig.json", "package.json"),
             settings = {
               typescript = {
                 tsserver = {
-                  -- 增加記憶體限制，大型專案必須
                   maxTsServerMemory = 4096,
-                  -- 優化檔案監視，排除 node_modules
                   watchOptions = {
                     watchFile = "useFsEvents",
                     watchDirectory = "useFsEvents",
@@ -222,7 +223,9 @@ return {
                     excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/build" },
                   },
                 },
-                -- 關閉 inlay hints 減少計算負擔
+                -- Disable expensive features for large projects
+                referencesCodeLens = { enabled = false },
+                implementationsCodeLens = { enabled = false },
                 inlayHints = {
                   parameterNames = { enabled = "none" },
                   parameterTypes = { enabled = false },
@@ -232,7 +235,6 @@ return {
                   enumMemberValues = { enabled = false },
                 },
                 updateImportsOnFileMove = { enabled = "always" },
-                -- 減少不必要的功能
                 suggestionActions = { enabled = false },
                 preferences = {
                   importModuleSpecifier = "relative",
@@ -249,6 +251,8 @@ return {
                     excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/build" },
                   },
                 },
+                referencesCodeLens = { enabled = false },
+                implementationsCodeLens = { enabled = false },
                 inlayHints = {
                   parameterNames = { enabled = "none" },
                   parameterTypes = { enabled = false },
@@ -262,11 +266,11 @@ return {
               },
               vtsls = {
                 autoUseWorkspaceTsdk = true,
+                enableMoveToFileCodeAction = true,
                 experimental = {
-                  -- 啟用伺服器端模糊匹配，加速補全
                   completion = {
                     enableServerSideFuzzyMatch = true,
-                    entriesLimit = 50, -- 限制補全項目數量
+                    entriesLimit = 50,
                   },
                 },
               },
