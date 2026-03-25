@@ -39,6 +39,80 @@ return {
     -- import mason_lspconfig plugin
     local mason_lspconfig = require("mason-lspconfig")
 
+    -- nvim 0.11+ new API: configure servers before mason enables them
+    vim.lsp.config("pylsp", {
+      settings = {
+        pylsp = {
+          plugins = {
+            pycodestyle = { enabled = false },
+            pyflakes = { enabled = false },
+            pylint = { enabled = false },
+            mccabe = { enabled = false },
+          },
+        },
+      },
+    })
+    vim.lsp.config("yamlls", {
+      filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab", "helm" },
+      settings = {
+        yaml = {
+          schemaStore = {
+            enable = true,
+            url = "https://www.schemastore.org/api/json/catalog.json",
+          },
+          schemas = {
+            ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+            ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
+            ["https://json.schemastore.org/helmfile.json"] = {
+              "helmfile*.{yml,yaml}",
+              "helmfile*.yaml.gotmpl",
+            },
+            ["https://json.schemastore.org/chart.json"] = "Chart.{yml,yaml}",
+            ["https://json.schemastore.org/kustomization.json"] = "kustomization.{yml,yaml}",
+            kubernetes = {
+              "*.k8s.yaml",
+              "*.k8s.yml",
+              "deployment*.yaml",
+              "service*.yaml",
+              "ingress*.yaml",
+              "configmap*.yaml",
+              "secret*.yaml",
+              "statefulset*.yaml",
+              "daemonset*.yaml",
+              "cronjob*.yaml",
+              "job*.yaml",
+              "*/k8s/*.yaml",
+              "*/kubernetes/*.yaml",
+              "*/manifests/*.yaml",
+            },
+          },
+          validate = true,
+          completion = true,
+          hover = true,
+        },
+      },
+    })
+    vim.lsp.config("pyright", {
+      settings = {
+        python = {
+          analysis = {
+            typeCheckingMode = "off",
+            diagnosticSeverityOverrides = {
+              reportMissingImports = "none",
+              reportMissingModuleSource = "none",
+              reportArgumentType = "none",
+              reportUnreachable = "none",
+              reportAttributeAccessIssue = "none",
+              reportOptionalOperand = "none",
+              reportOptionalMemberAccess = "none",
+              reportIncompatibleMethodOverride = "none",
+              reportReturnType = "none",
+            },
+          },
+        },
+      },
+    })
+
     -- import cmp-nvim-lsp plugin
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
@@ -214,7 +288,6 @@ return {
             settings = {
               typescript = {
                 tsserver = {
-                  maxTsServerMemory = 4096,
                   watchOptions = {
                     watchFile = "useFsEvents",
                     watchDirectory = "useFsEvents",
@@ -223,7 +296,6 @@ return {
                     excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/build" },
                   },
                 },
-                -- Disable expensive features for large projects
                 referencesCodeLens = { enabled = false },
                 implementationsCodeLens = { enabled = false },
                 inlayHints = {
@@ -242,7 +314,6 @@ return {
               },
               javascript = {
                 tsserver = {
-                  maxTsServerMemory = 4096,
                   watchOptions = {
                     watchFile = "useFsEvents",
                     watchDirectory = "useFsEvents",
@@ -272,6 +343,7 @@ return {
                     enableServerSideFuzzyMatch = true,
                     entriesLimit = 50,
                   },
+                  maxInlayHintLength = 30,
                 },
               },
             },
@@ -285,32 +357,49 @@ return {
           lspconfig["yamlls"].setup({
             capabilities = capabilities,
             on_attach = lsp_attach,
+            filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab", "helm" },
+            -- Skip Helm template files (they have {{ }} syntax)
+            root_dir = function(fname)
+              -- Don't attach to files in templates/ directory (Helm)
+              if fname:match("/templates/") then
+                return nil
+              end
+              return require("lspconfig.util").find_git_ancestor(fname) or vim.fn.getcwd()
+            end,
             settings = {
               yaml = {
+                schemaStore = {
+                  enable = true,
+                  url = "https://www.schemastore.org/api/json/catalog.json",
+                },
                 schemas = {
                   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-                  ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
                   ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
-                  ["https://json.schemastore.org/helmfile.json"] = "helmfile*.{yml,yaml}",
+                  ["https://json.schemastore.org/helmfile.json"] = {
+                    "helmfile*.{yml,yaml}",
+                    "helmfile*.yaml.gotmpl",
+                    "helmfile*.yml.gotmpl",
+                  },
                   ["https://json.schemastore.org/chart.json"] = "Chart.{yml,yaml}",
                   ["https://json.schemastore.org/kustomization.json"] = "kustomization.{yml,yaml}",
                   kubernetes = {
-                    "**/deployment*.yaml",
-                    "**/service*.yaml",
-                    "**/configmap*.yaml",
-                    "**/secret*.yaml",
-                    "**/ingress*.yaml",
-                    "**/pod*.yaml",
-                    "**/namespace*.yaml",
-                    "**/statefulset*.yaml",
-                    "**/daemonset*.yaml",
-                    "**/cronjob*.yaml",
-                    "**/job*.yaml",
-                    "**/pv*.yaml",
-                    "**/pvc*.yaml",
-                    "**/role*.yaml",
-                    "**/clusterrole*.yaml",
-                    "**/serviceaccount*.yaml",
+                    "*.k8s.yaml",
+                    "*.k8s.yml",
+                    "deployment*.yaml",
+                    "deployment*.yml",
+                    "service*.yaml",
+                    "service*.yml",
+                    "ingress*.yaml",
+                    "configmap*.yaml",
+                    "secret*.yaml",
+                    "statefulset*.yaml",
+                    "daemonset*.yaml",
+                    "cronjob*.yaml",
+                    "job*.yaml",
+                    "rbac*.yaml",
+                    "*/k8s/*.yaml",
+                    "*/kubernetes/*.yaml",
+                    "*/manifests/*.yaml",
                   },
                 },
                 validate = true,
@@ -320,20 +409,53 @@ return {
             },
           })
         end,
-        ["eslint"] = function()
-          lspconfig["eslint"].setup({
+        -- Helm language server for Helm charts (handles {{ }} syntax)
+        ["helm_ls"] = function()
+          lspconfig["helm_ls"].setup({
             capabilities = capabilities,
-            on_attach = lsp_attach, -- 使用標準 attach，不再自動修復
-            filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+            on_attach = lsp_attach,
             settings = {
-              workingDirectories = { mode = "auto" },
-              -- 減少 ESLint 的工作負擔
-              codeAction = {
-                disableRuleComment = { enable = false },
-                showDocumentation = { enable = true },
+              ["helm-ls"] = {
+                yamlls = {
+                  path = "yaml-language-server",
+                },
               },
-              -- 只在需要時驗證，不要太頻繁
-              run = "onSave", -- 改為儲存時才執行，而非即時
+            },
+          })
+        end,
+        -- Disable ESLint LSP - use eslint_d via conform instead (much faster)
+        ["eslint"] = function() end,
+        ["pyright"] = function()
+          lspconfig["pyright"].setup({
+            capabilities = capabilities,
+            on_attach = lsp_attach,
+            settings = {
+              python = {
+                analysis = {
+                  typeCheckingMode = "off",
+                  diagnosticSeverityOverrides = {
+                    reportMissingImports = "none",
+                    reportArgumentType = "none",
+                    reportUnreachable = "none",
+                  },
+                },
+              },
+            },
+          })
+        end,
+        ["pylsp"] = function()
+          lspconfig["pylsp"].setup({
+            capabilities = capabilities,
+            on_attach = lsp_attach,
+            settings = {
+              pylsp = {
+                plugins = {
+                  pycodestyle = { enabled = false },
+                  pyflakes = { enabled = false },
+                  pylint = { enabled = false },
+                  mccabe = { enabled = false },
+                },
+              },
             },
           })
         end,

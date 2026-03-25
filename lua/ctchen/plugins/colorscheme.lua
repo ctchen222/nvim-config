@@ -1,5 +1,5 @@
 -- Set active colorscheme: "catppuccin" or "tokyonight"
-local active_theme = "catppuccin"
+local active_theme = "tokyonight"
 local transparent = false -- set to true to enable transparency
 
 return {

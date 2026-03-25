@@ -43,3 +43,21 @@ opt.splitbelow = true -- split horizontal window to the bottom
 opt.swapfile = false
 
 opt.spell = true
+
+-- Helm filetype detection (files in templates/ with .yaml/.yml)
+vim.filetype.add({
+  pattern = {
+    [".*/templates/.*%.yaml"] = "helm",
+    [".*/templates/.*%.yml"] = "helm",
+    [".*/templates/.*%.tpl"] = "helm",
+    ["helmfile.*%.yaml"] = "helm",
+  },
+})
+
+-- Go template filetype detection
+vim.filetype.add({
+  extension = {
+    gotmpl = "gotmpl",
+    tmpl = "gotmpl",
+  },
+})

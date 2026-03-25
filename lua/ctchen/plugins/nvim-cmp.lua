@@ -210,6 +210,9 @@ return {
     -- loads vscode style snippets from installed plugins (e.g. friendly-snippets)
     require("luasnip.loaders.from_vscode").lazy_load()
 
+    -- helm files inherit yaml snippets (k8s deploy/svc/ing etc.)
+    require("luasnip").filetype_extend("helm", { "yaml" })
+
     cmp.setup({
       experimental = {
         ghost_text = { hl_group = "CmpGhostText" },

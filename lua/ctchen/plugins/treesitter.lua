@@ -10,6 +10,9 @@ return {
     local treesitter = require("nvim-treesitter.configs")
 
     -- configure treesitter
+    -- helm filetype reuses gotmpl parser (yaml + go template syntax)
+    vim.treesitter.language.register("gotmpl", "helm")
+
     treesitter.setup({ -- enable syntax highlighting
       highlight = {
         enable = true,

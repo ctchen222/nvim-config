@@ -173,8 +173,9 @@ return {
         "prismals",
         "pyright",
         "sqls",
-        "eslint", -- ESLint LSP server (faster than eslint_d)
+        -- "eslint", -- Disabled: use eslint_d via conform instead
         "yamlls", -- YAML language server (Kubernetes, Docker Compose, etc.)
+        "helm_ls", -- Helm chart language server (handles {{ }} templates)
         "jdtls", -- Java language server
       },
     })
@@ -184,7 +185,7 @@ return {
         "prettier", -- prettier formatter
         "stylua", -- lua formatter
         "ruff", -- python linter + formatter (replaces isort, black, pylint)
-        -- "eslint_d", -- Replaced by ESLint LSP server
+        -- "eslint_d", -- Disabled: doesn't work with pnpm monorepos
         "sqlfluff", -- sql formatter
         -- Java tools
         "google-java-format", -- java formatter
