@@ -249,7 +249,16 @@ return {
 
     -- LSP code tracing
     keymap.set("n", "<leader>fT", "<cmd>Telescope lsp_type_definitions<cr>", { desc = "Find type definition" })
-    keymap.set("n", "<leader>f<", "<cmd>Telescope lsp_incoming_calls<cr>", { desc = "Incoming calls" })
+    keymap.set("n", "<leader>f<", function()
+      local clients = vim.tbl_filter(function(c)
+        return c.server_capabilities.callHierarchyProvider
+      end, vim.lsp.get_clients({ bufnr = 0 }))
+      if #clients == 0 then
+        vim.notify("No LSP server supports call hierarchy", vim.log.levels.WARN)
+        return
+      end
+      require("telescope.builtin").lsp_incoming_calls()
+    end, { desc = "Incoming calls" })
 
     -- Navigation
     keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find buffers" })
