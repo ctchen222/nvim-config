@@ -297,17 +297,6 @@ Format your response as:
       },
     },
   },
-  -- 移除 render-markdown.nvim，只保留 markview.nvim（功能更完整）
-  {
-    "OXY2DEV/markview.nvim",
-    ft = { "markdown", "codecompanion" },
-    opts = {
-      preview = {
-        filetypes = { "markdown", "codecompanion" },
-        ignore_buftypes = {},
-      },
-    },
-  },
   {
     "echasnovski/mini.diff",
     ft = { "codecompanion" },

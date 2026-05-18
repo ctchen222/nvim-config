@@ -92,16 +92,16 @@ return {
       max_file_length = 5000,
       -- checkbox 樣式
       checkboxes = {
-        [" "] = { char = "☐", hl_group = "ObsidianTodo" },
-        ["x"] = { char = "✔", hl_group = "ObsidianDone" },
-        [">"] = { char = "➜", hl_group = "ObsidianRightArrow" },
-        ["~"] = { char = "☒", hl_group = "ObsidianTilde" },
+        [" "] = { order = 1, char = "TODO", hl_group = "ObsidianTodo" },
+        ["x"] = { order = 2, char = "DONE", hl_group = "ObsidianDone" },
+        [">"] = { order = 3, char = "NEXT", hl_group = "ObsidianRightArrow" },
+        ["~"] = { order = 4, char = "WIP", hl_group = "ObsidianTilde" },
       },
       bullets = { char = "•", hl_group = "ObsidianBullet" },
       external_link_icon = { char = "🔗", hl_group = "ObsidianExtLinkIcon" },
       hl_groups = {
         ObsidianTodo = { bold = true, fg = "#f78c6c" },
-        ObsidianDone = { bold = true, fg = "#89ddff" },
+        ObsidianDone = { bold = true, fg = "#9ece6a" },
         ObsidianRightArrow = { bold = true, fg = "#f78c6c" },
         ObsidianTilde = { bold = true, fg = "#ff5370" },
         ObsidianBullet = { bold = true, fg = "#89ddff" },
