@@ -1,3 +1,5 @@
+local copilot_model = "gpt-5-mini"
+
 return {
   {
     "olimorris/codecompanion.nvim",
@@ -14,32 +16,32 @@ return {
       adapters = {},
       strategies = {
         chat = {
+          adapter = {
+            name = "copilot",
+            model = copilot_model,
+          },
           send = {
             modes = { "n", "i" },
             key = "<C-s>",
           },
-          model = "claude-sonnet-4-5-20250929",
         },
         inline = {
-          adapter = "copilot",
-          model = "claude-sonnet-4-5-20250929",
-        },
-      },
-      inline = {
-        adapter = "copilot",
-        model = "claude-sonnet-4-5-20250929",
-        keymaps = {
-          accept_change = {
-            modes = { n = "gda", v = "ga" },
-            description = "Accept change (all in normal, selection in visual)",
+          adapter = {
+            name = "copilot",
+            model = copilot_model,
           },
-          reject_change = {
-            modes = { n = "gdr", v = "gr" },
-            opts = { nowait = true },
-            description = "Reject change (all in normal, selection in visual)",
+          keymaps = {
+            accept_change = {
+              modes = { n = "gda", v = "ga" },
+              description = "Accept change (all in normal, selection in visual)",
+            },
+            reject_change = {
+              modes = { n = "gdr", v = "gr" },
+              opts = { nowait = true },
+              description = "Reject change (all in normal, selection in visual)",
+            },
           },
         },
-        show_keymaps = true,
       },
       -- 自定義 commit message prompt，使用英文
       prompt_library = {
