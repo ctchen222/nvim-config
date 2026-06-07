@@ -1,3 +1,18 @@
+local function copilot_model_name(adapter)
+  local model = adapter.schema.model.default
+  if type(model) == "function" then
+    model = model(adapter)
+  end
+  return model or ""
+end
+
+local function copilot_supports_top_p(adapter)
+  local model = copilot_model_name(adapter)
+  return not vim.startswith(model, "o1")
+    and not model:find("codex")
+    and not vim.startswith(model, "gpt-5")
+end
+
 return {
   {
     "olimorris/codecompanion.nvim",
@@ -11,35 +26,47 @@ return {
       opts = {
         language = "Traditional Chinese",
       },
-      adapters = {},
+      adapters = {
+        http = {
+          copilot = function()
+            return require("codecompanion.adapters").extend("copilot", {
+              schema = {
+                top_p = {
+                  condition = copilot_supports_top_p,
+                },
+              },
+            })
+          end,
+        },
+      },
       strategies = {
         chat = {
+          adapter = {
+            name = "copilot",
+            model = "gpt-5.4-mini",
+          },
           send = {
             modes = { "n", "i" },
             key = "<C-s>",
           },
-          model = "claude-sonnet-4-5-20250929",
         },
         inline = {
-          adapter = "copilot",
-          model = "claude-sonnet-4-5-20250929",
-        },
-      },
-      inline = {
-        adapter = "copilot",
-        model = "claude-sonnet-4-5-20250929",
-        keymaps = {
-          accept_change = {
-            modes = { n = "gda", v = "ga" },
-            description = "Accept change (all in normal, selection in visual)",
+          adapter = {
+            name = "copilot",
+            model = "gpt-5.4-mini",
           },
-          reject_change = {
-            modes = { n = "gdr", v = "gr" },
-            opts = { nowait = true },
-            description = "Reject change (all in normal, selection in visual)",
+          keymaps = {
+            accept_change = {
+              modes = { n = "gda", v = "ga" },
+              description = "Accept change (all in normal, selection in visual)",
+            },
+            reject_change = {
+              modes = { n = "gdr", v = "gr" },
+              opts = { nowait = true },
+              description = "Reject change (all in normal, selection in visual)",
+            },
           },
         },
-        show_keymaps = true,
       },
       -- 自定義 commit message prompt，使用英文
       prompt_library = {
@@ -110,6 +137,9 @@ Rules:
 - Use format: type/yymmdd-short-description
 - Today's date is: %s
 - Types: feature, bugfix, hotfix, refactor, docs, test, chore
+- This repository uses Conventional Commits for git history
+- Keep the branch type aligned with the intended commit type when possible
+- Conventional Commit types: feat, fix, docs, style, refactor, perf, test, chore
 - Use lowercase letters, numbers, and hyphens only
 - Keep description concise (2-4 words separated by hyphens)
 - No special characters or spaces
