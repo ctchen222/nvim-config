@@ -10,6 +10,13 @@ end
 return {
   "OXY2DEV/markview.nvim",
   ft = { "markdown", "codecompanion" },
+  keys = {
+    { "<leader>mt", "<cmd>Markview toggle<cr>", desc = "Markdown: Toggle preview" },
+    { "<leader>ms", "<cmd>Markview splitToggle<cr>", desc = "Markdown: Toggle split preview" },
+    { "<leader>mh", "<cmd>Markview HybridToggle<cr>", desc = "Markdown: Toggle hybrid mode" },
+    { "<leader>mr", "<cmd>Markview render<cr>", desc = "Markdown: Render preview" },
+    { "<leader>mc", "<cmd>Markview clear<cr>", desc = "Markdown: Clear preview" },
+  },
   opts = {
     preview = {
       filetypes = { "markdown", "codecompanion" },

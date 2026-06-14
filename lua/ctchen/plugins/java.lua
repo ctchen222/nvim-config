@@ -8,20 +8,34 @@ return {
   config = function()
     local jdtls = require("jdtls")
     local mason_registry = require("mason-registry")
+    local mason_install_location = require("mason-core.installer.InstallLocation").global()
 
     -- =====================
     -- 路徑設定
     -- =====================
-    local jdtls_path = mason_registry.get_package("jdtls"):get_install_path()
-    local java_debug_path = mason_registry.get_package("java-debug-adapter"):get_install_path()
-    local java_test_path = mason_registry.get_package("java-test"):get_install_path()
+    mason_registry.get_package("jdtls")
+    mason_registry.get_package("java-debug-adapter")
+    mason_registry.get_package("java-test")
+    local jdtls_path = mason_install_location:package("jdtls")
+    local java_debug_path = mason_install_location:package("java-debug-adapter")
+    local java_test_path = mason_install_location:package("java-test")
 
     -- 根據作業系統選擇設定
     local config_path
     if vim.fn.has("mac") == 1 then
-      config_path = jdtls_path .. "/config_mac"
+      local arch = vim.fn.system("uname -m"):gsub("%s+", "")
+      if arch == "arm64" then
+        config_path = jdtls_path .. "/config_mac_arm"
+      else
+        config_path = jdtls_path .. "/config_mac"
+      end
     elseif vim.fn.has("unix") == 1 then
-      config_path = jdtls_path .. "/config_linux"
+      local arch = vim.fn.system("uname -m"):gsub("%s+", "")
+      if arch == "aarch64" then
+        config_path = jdtls_path .. "/config_linux_arm"
+      else
+        config_path = jdtls_path .. "/config_linux"
+      end
     else
       config_path = jdtls_path .. "/config_win"
     end
@@ -154,17 +168,17 @@ return {
               -- 專案設定
               configuration = {
                 updateBuildConfiguration = "interactive",
-                -- 可以在這裡指定 JDK 位置
-                -- runtimes = {
-                --   {
-                --     name = "JavaSE-17",
-                --     path = "/path/to/jdk-17",
-                --   },
-                --   {
-                --     name = "JavaSE-21",
-                --     path = "/path/to/jdk-21",
-                --   },
-                -- },
+                runtimes = {
+                {
+                  name = "JavaSE-11",
+                  path = "/opt/homebrew/Cellar/openjdk@11/11.0.25/libexec/openjdk.jdk/Contents/Home",
+                },
+                {
+                  name = "JavaSE-22",
+                  path = "/Library/Java/JavaVirtualMachines/jdk-22.jdk/Contents/Home",
+                  default = true,
+                },
+              },
               },
             },
             signatureHelp = {

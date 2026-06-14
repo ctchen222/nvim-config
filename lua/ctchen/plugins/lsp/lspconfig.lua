@@ -54,6 +54,16 @@ return {
     })
     vim.lsp.config("yamlls", {
       filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab", "helm" },
+      on_attach = function(client, bufnr)
+        -- helm files contain {{ }} go template syntax which yamlls can't parse
+        -- keep completion but suppress false-positive diagnostics
+        if vim.bo[bufnr].filetype == "helm" then
+          vim.diagnostic.enable(false, {
+            bufnr = bufnr,
+            ns = vim.lsp.diagnostic.get_namespace(client.id),
+          })
+        end
+      end,
       settings = {
         yaml = {
           schemaStore = {

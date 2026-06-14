@@ -178,6 +178,12 @@ return {
         "helm_ls", -- Helm chart language server (handles {{ }} templates)
         "jdtls", -- Java language server
       },
+      automatic_enable = {
+        -- Java is started explicitly by mfussenegger/nvim-jdtls.  Mason v2
+        -- otherwise auto-enables every installed Java server, including the
+        -- legacy java_language_server if it is present in Mason.
+        exclude = { "eslint", "jdtls", "java_language_server" },
+      },
     })
 
     mason_tool_installer.setup({

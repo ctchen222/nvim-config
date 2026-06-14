@@ -1,3 +1,4 @@
+--
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -13,10 +14,23 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({ { import = "ctchen.plugins" }, { import = "ctchen.plugins.lsp" } }, {
   checker = {
-    enabled = true,
-    notify = false,
+    enabled = false, -- disable auto update check for faster startup
   },
   change_detection = {
     notify = false,
+  },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
   },
 })

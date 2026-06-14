@@ -45,25 +45,57 @@ return {
       },
       -- 自定義 commit message prompt，使用英文
       prompt_library = {
-        ["Commit Message"] = {
+        ["Generate PR"] = {
           strategy = "chat",
-          description = "Generate a commit message (English)",
+          description = "Generate commit message, branch name, and PR description",
           opts = {
-            short_name = "commit",
+            short_name = "pr",
             auto_submit = true,
           },
           prompts = {
             {
               role = "system",
-              content = [[You are an expert at writing git commit messages following the Conventional Commit specification.
-Always respond in English only, regardless of the user's language setting.
+              content = function()
+                return string.format(
+                  [[You are an expert at git workflows. Always respond in English only.
+Today's date is: %s
 
-Rules:
-- Use conventional commit format: type(scope): description
+Generate all three of the following based on the staged changes:
+
+## 1. Commit Message
+- Format: type(scope): description
 - Types: feat, fix, docs, style, refactor, perf, test, chore
-- Keep the subject line under 50 characters
+- Subject line under 50 characters
 - Use imperative mood ("add" not "added")
-- Output only the commit message without any explanations]],
+
+## 2. Branch Name
+- Format: type/yymmdd-short-description
+- Types: feature, bugfix, hotfix, refactor, docs, test, chore
+- Lowercase, hyphens only, 2-4 words in description
+
+## 3. PR Description
+- Title: concise PR title (under 70 chars)
+- Summary: 2-3 bullet points describing what changed and why
+- Test Plan: checklist of what should be tested
+
+Output format (use exactly these headers):
+### Commit Message
+<commit message here>
+
+### Branch Name
+<branch name here>
+
+### PR Description
+**Title:** <pr title>
+
+**Summary:**
+<bullet points>
+
+**Test Plan:**
+<checklist>]],
+                  os.date("%y%m%d")
+                )
+              end,
             },
             {
               role = "user",
@@ -73,18 +105,24 @@ Rules:
                   return "No staged changes found. Please stage your changes first with `git add`."
                 end
                 return string.format(
-                  [[Generate a commit message for the following staged changes:
+                  [[Generate the commit message, branch name, and PR description for the following staged changes:
 
 ```diff
 %s
 ```
 
-Recent commit messages for reference:
+Recent commits for reference:
+```
+%s
+```
+
+Recent branches for reference:
 ```
 %s
 ```]],
                   diff,
-                  vim.fn.system("git log --pretty=format:'%s' -n 10")
+                  vim.fn.system("git log --pretty=format:'%s' -n 10"),
+                  vim.fn.system("git branch --sort=-committerdate --format='%(refname:short)' | head -10")
                 )
               end,
               opts = {

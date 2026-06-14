@@ -26,20 +26,24 @@ return {
       mysql = { "sqlfluff" },
       plsql = { "sqlfluff" },
       python = { "ruff_format", "ruff_organize_imports" },
+      java = { "google-java-format" },
     },
     formatters = {
+      ruff_format = {
+        prepend_args = { "--line-length", "120" },
+      },
       sqlfluff = {
         args = { "format", "--dialect", "postgres", "-" },
       },
     },
     default_format_opts = {
-      lsp_format = "fallback",
+      lsp_format = "never",
     },
     format_on_save = function(bufnr)
       if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
         return false
       end
-      return { timeout_ms = 3000, lsp_format = "fallback" }
+      return { timeout_ms = 2000, lsp_format = "never" }
     end,
   },
 }

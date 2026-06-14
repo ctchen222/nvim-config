@@ -6,7 +6,15 @@ return {
     "nvim-treesitter/nvim-treesitter",
   },
   config = function()
-    require("go").setup()
+    require("go").setup({
+      lsp_cfg = {
+        settings = {
+          gopls = {
+            templateExtensions = { "gotmpl", "tmpl" },
+          },
+        },
+      },
+    })
 
     vim.keymap.set("n", "<leader>gm", "<cmd>GoMockGen<cr>", { desc = "Generate Mocks" })
     vim.keymap.set("n", "<leader>gc", "<cmd>GoCmt<cr>", { desc = "Go Comments" })

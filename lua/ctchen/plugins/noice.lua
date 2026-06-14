@@ -15,6 +15,22 @@ return {
   },
   config = function()
     require("noice").setup({
+      routes = {
+        {
+          filter = {
+            event = "notify",
+            find = "callHierarchy",
+          },
+          opts = { skip = true },
+        },
+        {
+          filter = {
+            event = "notify",
+            find = "Client copilot quit",
+          },
+          opts = { skip = true },
+        },
+      },
       lsp = {
         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
         override = {
