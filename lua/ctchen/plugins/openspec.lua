@@ -37,6 +37,20 @@ return {
           },
         },
       },
+      implement = {
+        default_profile = "implementation",
+        profiles = {
+          implementation = {
+            model = "gpt-5.4",
+            effort = "high",
+            layout = "external",
+            goal = "off",
+          },
+        },
+        external = {
+          command_template = [[/opt/homebrew/bin/alacritty --working-directory "$PWD" --title "OpenSpecImplement" -e {command} >/dev/null 2>&1 &]],
+        },
+      },
     })
   end,
 }
