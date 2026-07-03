@@ -17,7 +17,7 @@ return {
             {
               name = "Task implementation",
               model = "gpt-5.4",
-              effort = "high",
+              effort = "medium",
               command = "/model gpt-5.4 high",
               use_for = "code edits, focused tests, documentation updates, and small refactors",
             },
