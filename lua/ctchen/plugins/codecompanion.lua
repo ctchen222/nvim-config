@@ -1,4 +1,50 @@
-local copilot_model = "gpt-5-mini"
+local copilot_model = "gpt-4.1"
+
+local function copilot_model_fallback()
+  return {
+    [copilot_model] = {
+      billing = {
+        is_premium = true,
+        multiplier = 1,
+      },
+      description = "GPT-4.1 (1x)",
+      endpoint = "completions",
+      formatted_name = "GPT-4.1",
+      limits = {
+        max_output_tokens = 16384,
+        max_prompt_tokens = 128000,
+      },
+      opts = {
+        can_stream = true,
+        can_use_tools = true,
+        has_vision = true,
+      },
+      vendor = "Azure OpenAI",
+    },
+  }
+end
+
+local function copilot_model_choices(self, opts)
+  local fallback = copilot_model_fallback()
+
+  if opts and opts.async == false then
+    return fallback
+  end
+
+  local token = require("codecompanion.adapters.http.copilot.token")
+  local fetched = token.fetch()
+  local choices = {}
+
+  if fetched and fetched.copilot_token then
+    choices = require("codecompanion.adapters.http.copilot.get_models").choices(self, opts, fetched) or {}
+  end
+
+  if not choices[copilot_model] then
+    choices = vim.tbl_deep_extend("force", choices, fallback)
+  end
+
+  return choices
+end
 
 return {
   {
@@ -13,7 +59,31 @@ return {
       opts = {
         language = "Traditional Chinese",
       },
-      adapters = {},
+      adapters = {
+        http = {
+          copilot = function()
+            return require("codecompanion.adapters").extend("copilot", {
+              schema = {
+                model = {
+                  default = copilot_model,
+                  choices = copilot_model_choices,
+                },
+                top_p = {
+                  condition = function(self)
+                    local model = self.schema.model.default
+                    if type(model) == "function" then
+                      model = model()
+                    end
+                    return not vim.startswith(model, "o1")
+                      and not model:find("codex")
+                      and not vim.startswith(model, "gpt-5")
+                  end,
+                },
+              },
+            })
+          end,
+        },
+      },
       strategies = {
         chat = {
           adapter = {
