@@ -182,7 +182,10 @@ return {
         -- Java is started explicitly by mfussenegger/nvim-jdtls.  Mason v2
         -- otherwise auto-enables every installed Java server, including the
         -- legacy java_language_server if it is present in Mason.
-        exclude = { "eslint", "jdtls", "java_language_server" },
+        -- SQL servers are opt-in: sqlls reports false parser diagnostics for
+        -- PostgreSQL migrations, and sqls emits "no database connection"
+        -- unless a project has sqls config.yml connections configured.
+        exclude = { "eslint", "jdtls", "java_language_server", "sqlls", "sqls" },
       },
     })
 

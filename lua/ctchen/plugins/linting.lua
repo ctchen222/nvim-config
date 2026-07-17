@@ -37,10 +37,15 @@ return {
       sql = { "sqlfluff" },
     }
 
-    lint.linters.ruff.args = vim.list_extend(
-      vim.deepcopy(lint.linters.ruff.args),
-      { "--line-length", "120" }
-    )
+    lint.linters.ruff.args = vim.list_extend(vim.deepcopy(lint.linters.ruff.args), { "--line-length", "120" })
+
+    lint.linters.sqlfluff.args = {
+      "lint",
+      "--format=json",
+      "--dialect",
+      "postgres",
+      "-",
+    }
 
     local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 

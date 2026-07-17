@@ -260,14 +260,37 @@ return {
         ["sqls"] = function()
           lspconfig["sqls"].setup({
             capabilities = capabilities,
+            -- sqls needs configured database connections. Keep it opt-in so
+            -- standalone migration files do not emit connection errors.
+            autostart = false,
             on_attach = function(client, bufnr)
               lsp_attach(client, bufnr)
               -- sqls specific keymaps
               local opts = { buffer = bufnr, silent = true }
-              vim.keymap.set("n", "<leader>se", "<cmd>SqlsExecuteQuery<CR>", { buffer = bufnr, desc = "Execute SQL query" })
-              vim.keymap.set("v", "<leader>se", "<cmd>SqlsExecuteQuery<CR>", { buffer = bufnr, desc = "Execute selected SQL" })
-              vim.keymap.set("n", "<leader>sd", "<cmd>SqlsSwitchDatabase<CR>", { buffer = bufnr, desc = "Switch database" })
-              vim.keymap.set("n", "<leader>sc", "<cmd>SqlsSwitchConnection<CR>", { buffer = bufnr, desc = "Switch connection" })
+              vim.keymap.set(
+                "n",
+                "<leader>se",
+                "<cmd>SqlsExecuteQuery<CR>",
+                { buffer = bufnr, desc = "Execute SQL query" }
+              )
+              vim.keymap.set(
+                "v",
+                "<leader>se",
+                "<cmd>SqlsExecuteQuery<CR>",
+                { buffer = bufnr, desc = "Execute selected SQL" }
+              )
+              vim.keymap.set(
+                "n",
+                "<leader>sd",
+                "<cmd>SqlsSwitchDatabase<CR>",
+                { buffer = bufnr, desc = "Switch database" }
+              )
+              vim.keymap.set(
+                "n",
+                "<leader>sc",
+                "<cmd>SqlsSwitchConnection<CR>",
+                { buffer = bufnr, desc = "Switch connection" }
+              )
             end,
             settings = {
               sqls = {
@@ -480,4 +503,3 @@ return {
     })
   end,
 }
-
