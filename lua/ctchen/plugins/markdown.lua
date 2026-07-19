@@ -14,7 +14,7 @@ return {
     { "<leader>mt", "<cmd>Markview toggle<cr>", desc = "Markdown: Toggle preview" },
     { "<leader>ms", "<cmd>Markview splitToggle<cr>", desc = "Markdown: Toggle split preview" },
     { "<leader>mh", "<cmd>Markview HybridToggle<cr>", desc = "Markdown: Toggle hybrid mode" },
-    { "<leader>mr", "<cmd>Markview render<cr>", desc = "Markdown: Render preview" },
+    { "<leader>mr", "<cmd>Markview enable<cr>", desc = "Markdown: Render preview" },
     { "<leader>mc", "<cmd>Markview clear<cr>", desc = "Markdown: Clear preview" },
   },
   opts = {
