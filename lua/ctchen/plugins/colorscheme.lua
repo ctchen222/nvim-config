@@ -1,6 +1,30 @@
--- Set active colorscheme: "catppuccin" or "tokyonight"
-local active_theme = "tokyonight"
+-- Set active colorscheme: "catppuccin", "tokyonight", or an OneDark Pro theme
+local active_theme = "vaporwave"
 local transparent = false -- set to true to enable transparency
+local default_guifont = vim.o.guifont
+local vaporwave_guifont = "Operator Mono:h14"
+
+local onedarkpro_themes = {
+  onedark = true,
+  onelight = true,
+  onedark_vivid = true,
+  onedark_dark = true,
+  vaporwave = true,
+}
+
+local vaporwave_highlights = active_theme == "vaporwave" and {
+  Comment = { fg = "#A79AE8", italic = true },
+  String = { fg = "#F7A8D8" },
+  Character = { fg = "#F7A8D8" },
+  Number = { fg = "#FFD580" },
+  Constant = { fg = "#FFD580" },
+  Function = { fg = "#7DE8FF" },
+  Keyword = { fg = "#FF79C6", bold = true },
+  Type = { fg = "#F6E58D" },
+  Operator = { fg = "#75DDE8" },
+  Identifier = { fg = "#FF8FB3" },
+  Special = { fg = "#7DE8FF" },
+} or {}
 
 return {
   -- Catppuccin theme
@@ -38,6 +62,31 @@ return {
 
       if active_theme == "catppuccin" then
         vim.cmd.colorscheme("catppuccin")
+      end
+    end,
+  },
+
+  -- OneDark Pro themes: onedark, onelight, onedark_vivid, onedark_dark, vaporwave
+  {
+    "olimorris/onedarkpro.nvim",
+    priority = 1000,
+    lazy = not onedarkpro_themes[active_theme],
+    config = function()
+      require("onedarkpro").setup({
+        highlights = vaporwave_highlights,
+        options = {
+          transparency = transparent,
+          terminal_colors = true,
+        },
+      })
+
+      -- Operator Mono is only applied to Vaporwave in GUI clients.
+      if vim.fn.has("gui_running") == 1 then
+        vim.opt.guifont = active_theme == "vaporwave" and vaporwave_guifont or default_guifont
+      end
+
+      if onedarkpro_themes[active_theme] then
+        vim.cmd.colorscheme(active_theme)
       end
     end,
   },
