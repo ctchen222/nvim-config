@@ -49,7 +49,7 @@ end
 return {
   {
     "olimorris/codecompanion.nvim",
-    version = "v17.33.0",
+    version = "v19.22.0",
     cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionActions", "CodeCompanionCmd" },
     ft = { "codecompanion" },
     dependencies = {
@@ -83,12 +83,24 @@ return {
             })
           end,
         },
+        acp = {
+          codex = function()
+            return require("codecompanion.adapters").extend("codex", {
+              defaults = {
+                auth_method = "chat-gpt",
+                session_config_options = {
+                  model = "gpt-5.4",
+                },
+              },
+            })
+          end,
+        },
       },
       strategies = {
         chat = {
           adapter = {
-            name = "copilot",
-            model = copilot_model,
+            name = "codex",
+            model = "gpt-5.4",
           },
           send = {
             modes = { "n", "i" },
