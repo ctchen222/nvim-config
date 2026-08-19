@@ -1,5 +1,21 @@
 local copilot_model = "gpt-4.1"
 
+local function set_codecompanion_highlights()
+  local highlights = {
+    CodeCompanionChatHeader = { fg = "#8FD3D9", bold = true },
+    CodeCompanionChatSeparator = { fg = "#4A4261" },
+    CodeCompanionChatFold = { fg = "#9187B8", italic = true },
+    CodeCompanionChatTool = { fg = "#C3B6D9" },
+    CodeCompanionChatToolGroups = { fg = "#D8C58A", bold = true },
+    CodeCompanionChatToolText = { fg = "#9187B8" },
+    CodeCompanionChatTokens = { fg = "#685C82" },
+  }
+
+  for group, opts in pairs(highlights) do
+    vim.api.nvim_set_hl(0, group, opts)
+  end
+end
+
 local function copilot_model_fallback()
   return {
     [copilot_model] = {
@@ -58,6 +74,39 @@ return {
     opts = {
       opts = {
         language = "Traditional Chinese",
+      },
+      rules = {
+        local_agent = {
+          description = "Local agent instructions",
+          files = { "agent.md" },
+        },
+        opts = {
+          chat = {
+            autoload = { "default", "local_agent" },
+          },
+        },
+      },
+      interactions = {
+        chat = {
+          roles = {
+            llm = "Codex",
+            user = "You",
+          },
+        },
+      },
+      display = {
+        chat = {
+          window = {
+            width = 0.56,
+            border = "rounded",
+          },
+          fold_reasoning = true,
+          show_reasoning = true,
+          show_token_count = false,
+          show_tools_processing = true,
+          show_header_separator = true,
+          separator = "─",
+        },
       },
       adapters = {
         http = {
@@ -375,6 +424,10 @@ Format your response as:
         },
       },
     },
+    config = function(_, opts)
+      require("codecompanion").setup(opts)
+      set_codecompanion_highlights()
+    end,
     keys = {
       {
         "<leader>ca",

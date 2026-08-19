@@ -34,8 +34,21 @@ return {
     },
   },
   config = function(_, opts)
+    vim.treesitter.language.register("markdown", "codecompanion")
     require("markview").setup(opts)
     set_markdown_task_highlights()
+
+    local function configure_buffer(bufnr)
+      local is_codecompanion = vim.bo[bufnr].filetype == "codecompanion"
+      vim.wo.spell = not is_codecompanion
+      vim.wo.wrap = not is_codecompanion
+      vim.wo.linebreak = true
+      vim.wo.breakindent = not is_codecompanion
+
+      if is_codecompanion then
+        vim.treesitter.start(bufnr, "markdown")
+      end
+    end
 
     local group = vim.api.nvim_create_augroup("CtchenMarkdownView", { clear = true })
 
@@ -47,11 +60,21 @@ return {
     vim.api.nvim_create_autocmd("FileType", {
       group = group,
       pattern = { "markdown", "codecompanion" },
-      callback = function()
-        vim.opt_local.wrap = true
-        vim.opt_local.linebreak = true
-        vim.opt_local.breakindent = true
+      callback = function(args)
+        configure_buffer(args.buf)
+        vim.schedule(function()
+          if vim.api.nvim_buf_is_valid(args.buf) then
+            require("markview.actions").attach(args.buf)
+          end
+        end)
       end,
     })
+
+    if vim.bo.filetype == "codecompanion" then
+      configure_buffer(0)
+      vim.schedule(function()
+        require("markview.actions").attach(0)
+      end)
+    end
   end,
 }
