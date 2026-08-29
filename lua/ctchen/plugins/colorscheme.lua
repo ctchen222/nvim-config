@@ -1,5 +1,5 @@
 -- Set active colorscheme: "catppuccin", "tokyonight", or an OneDark Pro theme
-local active_theme = "vaporwave"
+local active_theme = "tokyonight"
 local transparent = false -- set to true to enable transparency
 local default_guifont = vim.o.guifont
 local vaporwave_guifont = "Operator Mono:h14"
