@@ -41,7 +41,7 @@ return {
     local function configure_buffer(bufnr)
       local is_codecompanion = vim.bo[bufnr].filetype == "codecompanion"
       vim.wo.spell = not is_codecompanion
-      vim.wo.wrap = not is_codecompanion
+      vim.wo.wrap = true
       vim.wo.linebreak = true
       vim.wo.breakindent = not is_codecompanion
 
